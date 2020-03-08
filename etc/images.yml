@@ -1,0 +1,26 @@
+---
+ceph_ansible:
+  source: quay.io/osism/ceph-ansible
+  target: osism/ceph-ansible
+  tags:
+    - latest
+    - luminous
+    - luminous-latest
+    - nautilus
+    - nautilus-latest
+kolla_ansible:
+  source: quay.io/osism/kolla-ansible
+  target: osism/kolla-ansible
+  tags:
+    - latest
+    - rocky
+    - rocky-latest
+    - stein
+    - stein-latest
+    - train
+    - train-latest
+osism_ansible:
+  source: quay.io/osism/osism-ansible
+  target: osism/osism-ansible
+  tags:
+    - latest

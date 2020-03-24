@@ -8,6 +8,8 @@ ceph_ansible:
     - luminous-latest
     - nautilus
     - nautilus-latest
+    - octopus
+    - octopus-latest
 kolla_ansible:
   source: quay.io/osism/kolla-ansible
   target: osism/kolla-ansible

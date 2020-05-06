@@ -1,4 +1,5 @@
 import logging
+import socket
 
 import docker
 from tabulate import tabulate
@@ -26,18 +27,23 @@ for image in images:
     for tag in images[image]['tags']:
         logging.info("processing tag %s" % tag)
 
-        logging.info("pulling - %s:%s" % (source, tag))
-        client.pull(source, tag)
+        try:
+            logging.info("pulling - %s:%s" % (source, tag))
+            client.pull(source, tag)
 
-        docker_image = client.inspect_image("%s:%s" % (source, tag))
-        result.append([source, tag, docker_image["Id"],
-                       docker_image["Created"]])
+            docker_image = client.inspect_image("%s:%s" % (source, tag))
+            result.append([source, tag, docker_image["Id"],
+                           docker_image["Created"]])
 
-        logging.info("tagging - %s:%s" % (target, tag))
-        client.tag("%s:%s" % (source, tag), target, tag)
+            logging.info("tagging - %s:%s" % (target, tag))
+            client.tag("%s:%s" % (source, tag), target, tag)
 
-        logging.info("pushing - %s:%s" % (target, tag))
-        client.push(target, tag)
+            logging.info("pushing - %s:%s" % (target, tag))
+            client.push(target, tag)
+        except docker.errors.APIError:
+            pass
+        except socket.timeout:
+            pass
 
 for image in images:
 
@@ -46,10 +52,15 @@ for image in images:
 
     for tag in images[image]['tags']:
 
-        logging.info("removing - %s:%s" % (source, tag))
-        client.remove_image("%s:%s" % (source, tag))
+        try:
+            logging.info("removing - %s:%s" % (source, tag))
+            client.remove_image("%s:%s" % (source, tag))
 
-        logging.info("removing - %s:%s" % (target, tag))
-        client.remove_image("%s:%s" % (target, tag))
+            logging.info("removing - %s:%s" % (target, tag))
+            client.remove_image("%s:%s" % (target, tag))
+        except docker.errors.APIError:
+            pass
+        except socket.timeout:
+            pass
 
 print(tabulate(result, headers=["Image", "Tag", "Hash", "Created"]))

@@ -10,6 +10,9 @@ ceph_ansible:
     - nautilus-latest
     - octopus
     - octopus-latest
+  releases:
+    - luminous-2020.1.0
+    - nautilus-2020.1.0
 kolla_ansible:
   source: quay.io/osism/kolla-ansible
   target: osism/kolla-ansible
@@ -21,8 +24,13 @@ kolla_ansible:
     - stein-latest
     - train
     - train-latest
+  releases:
+    - rocky-2020.1.0
+    - train-2020.1.0
 osism_ansible:
   source: quay.io/osism/osism-ansible
   target: osism/osism-ansible
   tags:
     - latest
+  releases:
+    - 2020.1.0

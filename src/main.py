@@ -24,33 +24,46 @@ for image in images:
     source = images[image]['source']
     target = images[image]['target']
 
-    for tag in images[image]['tags']:
+    push = True
+
+    for tag in images[image]['tags'] + images[image]['releases']:
         logging.info("processing tag %s" % tag)
 
-        try:
-            logging.info("pulling - %s:%s" % (source, tag))
-            client.pull(source, tag)
+        if tag in images[image]['releases']:
+            logging.info("checking for existence - %s:%s" % (target, tag))
+            try:
+                client.history("%s:%s" % (target, tag))
+                push = False
+            except docker.errors.ImageNotFound:
+                push = True
 
-            docker_image = client.inspect_image("%s:%s" % (source, tag))
-            result.append([source, tag, docker_image["Id"],
-                           docker_image["Created"]])
+        if push:
+            try:
 
-            logging.info("tagging - %s:%s" % (target, tag))
-            client.tag("%s:%s" % (source, tag), target, tag)
+                logging.info("pulling - %s:%s" % (source, tag))
+                client.pull(source, tag)
 
-            logging.info("pushing - %s:%s" % (target, tag))
-            client.push(target, tag)
-        except docker.errors.APIError:
-            pass
-        except socket.timeout:
-            pass
+                docker_image = client.inspect_image("%s:%s" % (source, tag))
+                result.append([source, tag, docker_image["Id"],
+                               docker_image["Created"]])
+
+                logging.info("tagging - %s:%s" % (target, tag))
+                client.tag("%s:%s" % (source, tag), target, tag)
+
+                logging.info("pushing - %s:%s" % (target, tag))
+                client.push(target, tag)
+
+            except docker.errors.APIError:
+                pass
+            except socket.timeout:
+                pass
 
 for image in images:
 
     source = images[image]['source']
     target = images[image]['target']
 
-    for tag in images[image]['tags']:
+    for tag in images[image]['tags'] + images[image]['releases']:
 
         try:
             logging.info("removing - %s:%s" % (source, tag))

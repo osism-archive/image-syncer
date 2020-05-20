@@ -27,6 +27,12 @@ kolla_ansible:
   releases:
     - rocky-2020.1.0
     - train-2020.1.0
+manager:
+  source: quay.io/osism/manager
+  target: osism/manager
+  tags:
+    - latest
+  releases: []
 osism_ansible:
   source: quay.io/osism/osism-ansible
   target: osism/osism-ansible

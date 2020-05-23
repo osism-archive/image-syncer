@@ -32,6 +32,7 @@ manager:
   target: osism/manager
   tags:
     - latest
+    - nautilus-train
   releases: []
 osism_ansible:
   source: quay.io/osism/osism-ansible

@@ -24,6 +24,8 @@ kolla_ansible:
     - stein-latest
     - train
     - train-latest
+    - ussuri
+    - ussuri-latest
   releases:
     - rocky-2020.1.0
     - train-2020.1.0
@@ -33,6 +35,7 @@ manager:
   tags:
     - latest
     - nautilus-train
+    - nautilus-ussuri
   releases: []
 osism_ansible:
   source: quay.io/osism/osism-ansible
